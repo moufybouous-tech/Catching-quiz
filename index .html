@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Literature Test – Heart of Darkness • The Dead • The Second Coming</title>
+  <style>
+    :root {
+      --bg: #0f0f13;
+      --card: #1a1a24;
+      --accent: #c9a227;
+      --accent-hover: #e0b83a;
+      --text: #f0f0f0;
+      --muted: #a0a0b0;
+      --success: #2ecc71;
+      --danger: #e74c3c;
+      --border: #2a2a38;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    .container { max-width: 720px; margin: 0 auto; padding: 20px; }
+    h1, h2, h3 { font-weight: 600; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 22px;
+      background: var(--accent);
+      color: #111;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: var(--accent-hover); }
+    .btn:disabled { background: #444; color: #888; cursor: not-allowed; }
+    .btn-full { width: 100%; }
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      background: #12121a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 1rem;
+      margin-bottom: 12px;
+    }
+    input:focus { outline: none; border-color: var(--accent); }
+    label { display: block; margin-bottom: 6px; color: var(--muted); font-size: 0.9rem; }
+    .hidden { display: none !important; }
+    .center { text-align: center; }
+    .mt-10 { margin-top: 10px; }
+    .mt-20 { margin-top: 20px; }
+    .mb-20 { margin-bottom: 20px; }
+    .text-muted { color: var(--muted); }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      background: #2a2a38;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .header { text-align: center; padding: 30px 20px 10px; }
+    .header h1 { font-size: 1.7rem; margin-bottom: 6px; }
+    .header p { color: var(--muted); font-size: 0.95rem; }
+
+    .progress-wrap {
+      height: 8px;
+      background: #12121a;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+    .progress-bar {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: width 0.3s;
+    }
+    .timer {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-align: center;
+      margin-bottom: 16px;
+      font-variant-numeric: tabular-nums;
+    }
+    .timer.warning { color: #f39c12; }
+    .timer.danger { color: var(--danger); animation: pulse 1s infinite; }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    .question-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .question-text {
+      font-size: 1.15rem;
+      margin-bottom: 20px;
+      line-height: 1.45;
+    }
+    .options { display: flex; flex-direction: column; gap: 10px; }
+    .option {
+      background: #12121a;
+      border: 2px solid var(--border);
+      padding: 14px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-size: 1rem;
+    }
+    .option:hover { border-color: var(--accent); background: #1e1e2a; }
+    .option.selected { border-color: var(--accent); background: #2a2410; }
+    .option.disabled { pointer-events: none; opacity: 0.85; }
+    .score-big {
+      font-size: 3.2rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 10px 0;
+    }
+    .result-message { font-size: 1.15rem; margin-bottom: 20px; }
+    .footer-note {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-top: 30px;
+      padding-bottom: 20px;
+    }
+    .status-box {
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 0.95rem;
+    }
+    .status-box.ok { background: #1a3a2a; color: var(--success); }
+    .status-box.error { background: #3a1a1a; color: var(--danger); }
+    .status-box.info { background: #1a2a3a; color: #7ec8e3; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📚 Literature Test</h1>
+      <p>Heart of Darkness · The Dead · The Second Coming</p>
+      <p class="badge mt-10">16 Questions</p>
+    </div>
+
+    <!-- ENTRY SCREEN -->
+    <div id="entry-screen" class="card">
+      <h2 class="mb-20 center">Student Entry</h2>
+
+      <div id="connection-status" class="status-box info hidden"></div>
+
+      <label>Your Full Name</label>
+      <input type="text" id="student-name" placeholder="e.g. Ahmed Benali" autocomplete="name">
+
+      <label>Session Password (given by your teacher)</label>
+      <input type="text" id="session-password" placeholder="Enter the session password">
+
+      <button class="btn btn-full mt-10" id="start-btn" onclick="startQuiz()">Start Test</button>
+
+      <p class="text-muted center mt-20" style="font-size:0.85rem;">
+        Session password and time limit are controlled by the teacher from Google Sheets.<br>
+        No passwords are stored in this public page.
+      </p>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <div id="quiz-screen" class="hidden">
+      <div class="card">
+        <div class="timer" id="timer">25:00</div>
+        <div class="progress-wrap">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="question-meta">
+          <span id="q-number">Question 1 of 16</span>
+          <span id="student-display" class="badge"></span>
+        </div>
+        <div class="question-text" id="question-text"></div>
+        <div class="options" id="options"></div>
+        <button class="btn btn-full mt-20" id="next-btn" onclick="nextQuestion()" disabled>Next</button>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results-screen" class="card hidden center">
+      <h2>Test Completed</h2>
+      <div class="score-big" id="final-score">0 / 16</div>
+      <div class="result-message" id="result-message"></div>
+      <p class="text-muted mb-20" id="save-status"></p>
+      <button class="btn" onclick="location.reload()">Back to Home</button>
+    </div>
+
+    <div class="footer-note">
+      Literature Test · Heart of Darkness (Conrad) · The Dead (Joyce) · The Second Coming (Yeats)
+    </div>
+  </div>
+
+  <script>
+    // ============================================================
+    //  ONLY THIS URL – no passwords, no keys in the public file
+    //  Paste your Google Apps Script Web App URL below
+    // ============================================================
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw0m4mivm3Cit3ArdgQijg_FvAtXO0o3Y-KlMBgeOXMIe93rrzoERAdxXI-uduFDuOE/exec";
+
+    const TOTAL_QUESTIONS = 16;
+    const questions = [
+      { q: "Who is the author of Heart of Darkness?", options: ["Joseph Conrad", "James Joyce", "W.B. Yeats", "Chinua Achebe"], answer: 0 },
+      { q: "In Heart of Darkness, who narrates most of the story to the men on the Nellie?", options: ["Kurtz", "Marlow", "The Manager", "The Accountant"], answer: 1 },
+      { q: "What is the primary setting of the central journey in Heart of Darkness?", options: ["The Nile River", "The Congo River", "The Thames River", "The Amazon River"], answer: 1 },
+      { q: "Kurtz’s final words in Heart of Darkness are:", options: ["“The horror! The horror!”", "“Exterminate all the brutes!”", "“I am become Death”", "“The heart of darkness”"], answer: 0 },
+      { q: "What does the “whited sepulchre” refer to in Heart of Darkness?", options: ["The Inner Station", "Brussels / the Company headquarters", "The steamer", "Kurtz’s compound"], answer: 1 },
+      { q: "Marlow’s story is framed by a group of men waiting on a boat on which river?", options: ["The Congo", "The Thames", "The Seine", "The Rhine"], answer: 1 },
+      { q: "Who wrote the short story “The Dead”?", options: ["James Joyce", "Joseph Conrad", "W.B. Yeats", "Samuel Beckett"], answer: 0 },
+      { q: "“The Dead” is the final story in which collection?", options: ["Dubliners", "A Portrait of the Artist as a Young Man", "Ulysses", "Chamber Music"], answer: 0 },
+      { q: "What is the name of the main character in “The Dead”?", options: ["Stephen Dedalus", "Gabriel Conroy", "Leopold Bloom", "Michael Furey"], answer: 1 },
+      { q: "At the end of “The Dead”, Gabriel watches the snow falling and thinks of:", options: ["His career success", "Michael Furey and the living and the dead", "Leaving Ireland forever", "His children’s future"], answer: 1 },
+      { q: "Who was Michael Furey in relation to Gretta?", options: ["Her first husband", "A boy who loved her and died young", "Her brother", "Gabriel’s rival at the party"], answer: 1 },
+      { q: "Who wrote the poem “The Second Coming”?", options: ["W.B. Yeats", "T.S. Eliot", "James Joyce", "Seamus Heaney"], answer: 0 },
+      { q: "The famous opening line of “The Second Coming” is:", options: ["“Turning and turning in the widening gyre”", "“April is the cruellest month”", "“Let us go then, you and I”", "“I will arise and go now”"], answer: 0 },
+      { q: "In “The Second Coming”, what creature is imagined slouching toward Bethlehem?", options: ["A lion", "A rough beast", "A sphinx", "A falcon"], answer: 1 },
+      { q: "The image “Things fall apart; the centre cannot hold” is from:", options: ["Heart of Darkness", "The Dead", "The Second Coming", "Ulysses"], answer: 2 },
+      { q: "Yeats’s concept of the “gyre” in “The Second Coming” refers to:", options: ["A historical cycle or spiral of history", "A type of bird", "A religious ceremony", "A political party"], answer: 0 }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+    let answers = [];
+    let studentName = "";
+    let timeLimitMinutes = 25;
+    let remainingSeconds = 0;
+    let timerInterval = null;
+    let startTime = null;
+
+    async function startQuiz() {
+      studentName = document.getElementById("student-name").value.trim();
+      const password = document.getElementById("session-password").value.trim();
+      const statusBox = document.getElementById("connection-status");
+      const startBtn = document.getElementById("start-btn");
+
+      if (!studentName) {
+        alert("Please enter your full name.");
+        return;
+      }
+      if (!password) {
+        alert("Please enter the session password given by your teacher.");
+        return;
+      }
+      if (SCRIPT_URL.includes("PASTE_YOUR")) {
+        alert("The teacher has not finished the setup yet.");
+        return;
+      }
+
+      startBtn.disabled = true;
+      startBtn.textContent = "Checking session…";
+      statusBox.className = "status-box info";
+      statusBox.textContent = "Connecting to teacher settings…";
+      statusBox.classList.remove("hidden");
+
+      try {
+        // Ask Google Sheets for current password + time limit + open status
+        const response = await fetch(SCRIPT_URL + "?action=status&t=" + Date.now());
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+
+        if (!data.open) {
+          statusBox.className = "status-box error";
+          statusBox.textContent = "The session is currently CLOSED. Please wait for your teacher.";
+          startBtn.disabled = false;
+          startBtn.textContent = "Start Test";
+          return;
+        }
+
+        if (password !== data.password) {
+          statusBox.className = "status-box error";
+          statusBox.textContent = "Incorrect session password. Ask your teacher.";
+          startBtn.disabled = false;
+          startBtn.textContent = "Start Test";
+          return;
+        }
+
+        // Everything OK
+        timeLimitMinutes = data.timeLimit || 25;
+        currentQ = 0;
+        score = 0;
+        answers = [];
+        remainingSeconds = timeLimitMinutes * 60;
+        startTime = Date.now();
+
+        document.getElementById("entry-screen").classList.add("hidden");
+        document.getElementById("quiz-screen").classList.remove("hidden");
+        document.getElementById("student-display").textContent = studentName;
+        showQuestion();
+        startTimer();
+
+      } catch (err) {
+        console.error(err);
+        statusBox.className = "status-box error";
+        statusBox.textContent = "Could not reach the teacher settings. Check internet or ask your teacher to verify the Google Apps Script deployment.";
+        startBtn.disabled = false;
+        startBtn.textContent = "Start Test";
+      }
+    }
+
+    function showQuestion() {
+      const q = questions[currentQ];
+      document.getElementById("q-number").textContent = `Question ${currentQ + 1} of ${TOTAL_QUESTIONS}`;
+      document.getElementById("question-text").textContent = q.q;
+      document.getElementById("progress-bar").style.width = `${(currentQ / TOTAL_QUESTIONS) * 100}%`;
+
+      const opts = document.getElementById("options");
+      opts.innerHTML = "";
+      q.options.forEach((opt, i) => {
+        const div = document.createElement("div");
+        div.className = "option";
+        div.textContent = opt;
+        div.onclick = () => selectOption(i);
+        opts.appendChild(div);
+      });
+      document.getElementById("next-btn").disabled = true;
+      document.getElementById("next-btn").textContent = currentQ === TOTAL_QUESTIONS - 1 ? "Finish Test" : "Next";
+    }
+
+    function selectOption(index) {
+      if (answers[currentQ] !== undefined) return;
+      answers[currentQ] = index;
+      document.querySelectorAll("#options .option").forEach((el, i) => {
+        el.classList.add("disabled");
+        if (i === index) el.classList.add("selected");
+      });
+      document.getElementById("next-btn").disabled = false;
+    }
+
+    function nextQuestion() {
+      if (answers[currentQ] === undefined) return;
+      if (answers[currentQ] === questions[currentQ].answer) score++;
+      currentQ++;
+      if (currentQ < TOTAL_QUESTIONS) showQuestion();
+      else finishQuiz();
+    }
+
+    function startTimer() {
+      updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        remainingSeconds--;
+        updateTimerDisplay();
+        if (remainingSeconds <= 0) {
+          clearInterval(timerInterval);
+          finishQuiz(true);
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const m = Math.floor(remainingSeconds / 60);
+      const s = remainingSeconds % 60;
+      const el = document.getElementById("timer");
+      el.textContent = `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+      el.classList.remove("warning","danger");
+      if (remainingSeconds <= 60) el.classList.add("danger");
+      else if (remainingSeconds <= 180) el.classList.add("warning");
+    }
+
+    function finishQuiz(timeUp = false) {
+      clearInterval(timerInterval);
+      const percentage = Math.round((score / TOTAL_QUESTIONS) * 100);
+      const timeTakenSec = Math.round((Date.now() - startTime) / 1000);
+      const timeTaken = `${Math.floor(timeTakenSec/60)}m ${timeTakenSec%60}s`;
+
+      document.getElementById("quiz-screen").classList.add("hidden");
+      document.getElementById("results-screen").classList.remove("hidden");
+      document.getElementById("final-score").textContent = `${score} / ${TOTAL_QUESTIONS}`;
+
+      let msg = timeUp ? "Time is up! " : "";
+      if (percentage === 100) msg += "Perfect score! Outstanding knowledge of the texts.";
+      else if (percentage >= 80) msg += "Excellent work. You know these works well.";
+      else if (percentage >= 60) msg += "Good effort. Review the texts for a stronger result next time.";
+      else if (percentage >= 40) msg += "Fair. Focus on the key themes and characters.";
+      else msg += "Keep studying — these are rich and complex works.";
+      document.getElementById("result-message").textContent = msg;
+
+      const saveEl = document.getElementById("save-status");
+      saveEl.textContent = "Saving your score…";
+
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify({
+          name: studentName,
+          score: score,
+          total: TOTAL_QUESTIONS,
+          percentage: percentage,
+          timeTaken: timeTaken
+        })
+      }).then(() => {
+        saveEl.textContent = "Score saved successfully.";
+      }).catch(() => {
+        saveEl.textContent = "Could not save score automatically. Please show this result to your teacher: " + score + "/" + TOTAL_QUESTIONS;
+      });
+    }
+  </script>
+</body>
+</html>
